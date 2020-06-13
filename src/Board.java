@@ -348,22 +348,20 @@ public class Board {
                 String buffer1;
                 String buffer2;
                 String buffer3;
-                int temp1,temp2,temp3;
+
                 while(true){
+
                     buffer1=myInput.readLine();
-                    temp1=Integer.parseInt(buffer1);
-                    tks1.setText("Temperatura");
-                    tks2.setText(String.valueOf(temp1));
+                    tks1.setText("Temperatura(C)");
+                    tks2.setText(String.valueOf(buffer1));
 
                     buffer2=myInput.readLine();
-                    temp2=Integer.parseInt(buffer2);
-                    tks1.setText("%CPU");
-                    tks2.setText(String.valueOf(temp2));
+                    tks1.setText("%RAM");
+                    tks2.setText(String.valueOf(buffer2));
 
                     buffer3=myInput.readLine();
-                    temp3=Integer.parseInt(buffer3);
-                    tks1.setText("Jakas trzecia wartosc");
-                    tks2.setText(String.valueOf(temp3));
+                    tks1.setText("%CPU");
+                    tks2.setText(String.valueOf(buffer3));
                 }
 
             }else if(buf.equals("4")){

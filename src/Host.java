@@ -133,8 +133,8 @@ public class Host{
                     Thread.sleep(1500);
                     myoutput.print(df.format(Double.parseDouble(line4)) + "\n");
                     Thread.sleep(1500);
-
                 }
+
 
             }else if(i==4){
 
