@@ -237,29 +237,23 @@ public class Host{
                     robot=new Robot();
                     Dimension screenSize;
                     BufferedImage screen;
-                    int X_RES;
-                    int Y_RES;
                     int width,heigh;
                     int r,g,b;
                     int loops=0;
                     int rgb;
                     Color color;
-                    BufferedImage imgSection;
                     while (true) {
                         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-                        X_RES = screenSize.width;
-                        Y_RES = screenSize.height;
+                        width = screenSize.width;
+                        heigh = screenSize.height;
                         screen =robot.createScreenCapture(new Rectangle(screenSize));
-                        imgSection=screen.getSubimage(0,0,X_RES,Y_RES);
-                        width=imgSection.getWidth();
-                        heigh=imgSection.getHeight();
                         r=0;
                         g=0;
                         b=0;
                         loops=0;
                         for(int x=0;x<width;x+=SECT_SKIP){
                             for(int y=0;y<heigh;y+=SECT_SKIP){
-                                rgb=imgSection.getRGB(x,y);
+                                rgb=screen.getRGB(x,y);
                                 color=new Color(rgb);
                                 r+=color.getRed();
                                 g+=color.getGreen();
