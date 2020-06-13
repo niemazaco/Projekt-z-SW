@@ -1,6 +1,7 @@
 import java.awt.*;
 import java.io.*;
 import java.net.*;
+import java.text.DecimalFormat;
 import java.util.Scanner;
 
 public class Host{
@@ -82,25 +83,57 @@ public class Host{
                 //Wyswietlanie obciazania systemu Hosta:
                 myoutput.print("3\n");
 
+                DecimalFormat df = new DecimalFormat("##.##");
+                Process temp;
+                Process total;
+                Process used;
+                Process cpu;
 
-                //Wartosci podane na sztywno, do modyfikacji:
-                //TRZEBA POBRAC REALNE WARTOSCI Z KOMPUTERA
-                //PONIZSZE ZMIENNE INT SA POMOCNICZE DO ZAPREZENTOWANIA PRZESYLANIA
+                BufferedReader readerT;
+                BufferedReader reader1;
+                BufferedReader reader2;
+                BufferedReader reader3;
+                String line1;
+
+                String line2;
+                String line3;
+                String line4;
+                double ram;
+
+                while(true) {
+
+                    temp = Runtime.getRuntime().exec(new String[]{"bash", "-c", "cat /sys/class/thermal/thermal_zone0/temp"});
+                    total = Runtime.getRuntime().exec(new String[]{"bash", "-c", "free | grep Mem | cut -d \" \" -f8"});
+                    used = Runtime.getRuntime().exec(new String[]{"bash", "-c", "free | grep Mem | cut -d \" \" -f13"});
+                    cpu = Runtime.getRuntime().exec(new String[]{"bash", "-c", "grep \'cpu \' /proc/stat | awk \'{usage=($2+$4)*100/($2+$4+$5)} END {print usage}\'"});
+
+                    temp.waitFor();
+                    readerT = new BufferedReader(new InputStreamReader(temp.getInputStream()));
+
+                    total.waitFor();
+                    reader1 = new BufferedReader(new InputStreamReader(total.getInputStream()));
+                    used.waitFor();
+                    reader2 = new BufferedReader(new InputStreamReader(used.getInputStream()));
+
+                    cpu.waitFor();
+                    reader3 = new BufferedReader(new InputStreamReader(cpu.getInputStream()));
+                    line1 = readerT.readLine();
+
+                    line2 = reader1.readLine();
+                    line3 = reader2.readLine();
+                    line4 = reader3.readLine();
+                    ram = (Double.parseDouble(line2) / Double.parseDouble(line3));
 
 
-                int value1=100;
-                int value2=200;
-                int value3=300;
+                    myoutput.print(String.valueOf(Integer.parseInt(line1) / 1000) + "\n");
 
-                while(true){
-                    myoutput.print(value1+"\n");
                     Thread.sleep(1500);
-                    myoutput.print(value2+"\n");
+                    myoutput.print(df.format(ram) + "\n");
                     Thread.sleep(1500);
-                    myoutput.print(value3+"\n");
+                    myoutput.print(df.format(Double.parseDouble(line4)) + "\n");
                     Thread.sleep(1500);
-
                 }
+
 
             }else if(i==4){
 
