@@ -216,7 +216,7 @@ public class Board {
         buttons.add(s7);
         buttons.add(s8);
 
-        jFrame.setResizable(false);
+        jFrame.setResizable(true);
         jFrame.setVisible(true);
     }
     public static void main(String args[]) throws IOException {

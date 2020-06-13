@@ -1,6 +1,8 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.*;
+import java.text.DecimalFormat;
 import java.util.Scanner;
 
 public class Host{
@@ -82,31 +84,59 @@ public class Host{
                 //Wyswietlanie obciazania systemu Hosta:
                 myoutput.print("3\n");
 
+                DecimalFormat df = new DecimalFormat("##.##");
+                Process temp;
+                Process total;
+                Process used;
+                Process cpu;
 
-                //Wartosci podane na sztywno, do modyfikacji:
-                //TRZEBA POBRAC REALNE WARTOSCI Z KOMPUTERA
-                //PONIZSZE ZMIENNE INT SA POMOCNICZE DO ZAPREZENTOWANIA PRZESYLANIA
+                BufferedReader readerT;
+                BufferedReader reader1;
+                BufferedReader reader2;
+                BufferedReader reader3;
+                String line1;
+
+                String line2;
+                String line3;
+                String line4;
+                double ram;
+
+                while(true) {
+
+                    temp = Runtime.getRuntime().exec(new String[]{"bash", "-c", "cat /sys/class/thermal/thermal_zone0/temp"});
+                    total = Runtime.getRuntime().exec(new String[]{"bash", "-c", "free | grep Mem | cut -d \" \" -f8"});
+                    used = Runtime.getRuntime().exec(new String[]{"bash", "-c", "free | grep Mem | cut -d \" \" -f13"});
+                    cpu = Runtime.getRuntime().exec(new String[]{"bash", "-c", "grep \'cpu \' /proc/stat | awk \'{usage=($2+$4)*100/($2+$4+$5)} END {print usage}\'"});
+
+                    temp.waitFor();
+                    readerT = new BufferedReader(new InputStreamReader(temp.getInputStream()));
+
+                    total.waitFor();
+                    reader1 = new BufferedReader(new InputStreamReader(total.getInputStream()));
+                    used.waitFor();
+                    reader2 = new BufferedReader(new InputStreamReader(used.getInputStream()));
+
+                    cpu.waitFor();
+                    reader3 = new BufferedReader(new InputStreamReader(cpu.getInputStream()));
+                    line1 = readerT.readLine();
+
+                    line2 = reader1.readLine();
+                    line3 = reader2.readLine();
+                    line4 = reader3.readLine();
+                    ram = (Double.parseDouble(line2) / Double.parseDouble(line3));
 
 
-                int value1=100;
-                int value2=200;
-                int value3=300;
+                    myoutput.print(String.valueOf(Integer.parseInt(line1) / 1000) + "\n");
 
-                while(true){
-                    myoutput.print(value1+"\n");
                     Thread.sleep(1500);
-                    myoutput.print(value2+"\n");
+                    myoutput.print(df.format(ram) + "\n");
                     Thread.sleep(1500);
-                    myoutput.print(value3+"\n");
+                    myoutput.print(df.format(Double.parseDouble(line4)) + "\n");
                     Thread.sleep(1500);
 
                 }
 
             }else if(i==4){
-
-                //PONIZEJ W MIEJSCACH, GDZIE PISZE AKCJA KLAWISZA:X NALEZY WYWOLAC JAKAS AKCJE NA KOMPUTERZE
-                //PRZYKLADOWO ODPALIC FIREFOXA CZY COS
-
 
                 String buffer1;
                 int temp;
@@ -201,18 +231,52 @@ public class Host{
                 /* WYSWIETLANIE KOLORU NA RGB*/
                 //Wartosci na sztywno, do modyfikacji:
                 //TRZEBA POZYSKAC WARTOSC KOLOROW DO PRZESLANIA
-                int temp1=100;
-                int temp2=150;
-                int temp3=200;
-
-                while(true){
-                    myoutput.print(temp1+"\n");
-                    myoutput.print(temp2+"\n");
-                    myoutput.print(temp3+"\n");
-                    Thread.sleep(10);
-                    temp2++;
-                    if(temp2==255)
-                        temp2=0;
+                int SECT_SKIP=10;
+                Robot robot;
+                try {
+                    robot=new Robot();
+                    Dimension screenSize;
+                    BufferedImage screen;
+                    int X_RES;
+                    int Y_RES;
+                    int width,heigh;
+                    int r,g,b;
+                    int loops=0;
+                    int rgb;
+                    Color color;
+                    BufferedImage imgSection;
+                    while (true) {
+                        screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                        X_RES = screenSize.width;
+                        Y_RES = screenSize.height;
+                        screen =robot.createScreenCapture(new Rectangle(screenSize));
+                        imgSection=screen.getSubimage(0,0,X_RES,Y_RES);
+                        width=imgSection.getWidth();
+                        heigh=imgSection.getHeight();
+                        r=0;
+                        g=0;
+                        b=0;
+                        loops=0;
+                        for(int x=0;x<width;x+=SECT_SKIP){
+                            for(int y=0;y<heigh;y+=SECT_SKIP){
+                                rgb=imgSection.getRGB(x,y);
+                                color=new Color(rgb);
+                                r+=color.getRed();
+                                g+=color.getGreen();
+                                b+=color.getBlue();
+                                loops++;
+                            }
+                        }
+                        r=r/loops;
+                        g=g/loops;
+                        b=b/loops;
+                        myoutput.print(r + "\n");
+                        myoutput.print(g + "\n");
+                        myoutput.print(b + "\n");
+                        Thread.sleep(10);
+                    }
+                }catch (AWTException e){
+                    e.printStackTrace();
                 }
             }
             skt.close();
