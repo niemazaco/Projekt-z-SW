@@ -431,29 +431,29 @@ public class Board {
                     bufor1=myInput.readLine();
                     temp=Integer.parseInt(bufor1);
                     if(temp==1){
-                        tks1.setText("Klawisza S1");
-                        tks2.setText("Akcja klawisza S1");
+                        tks1.setText("Klawisz S1");
+                        tks2.setText("Google");
                     }else if(temp==2){
-                        tks1.setText("Klawisza S2");
-                        tks2.setText("Akcja klawisza S2");
+                        tks1.setText("Klawisz S2");
+                        tks2.setText("elf2.pk.edu.pl");
                     }else if(temp==3){
-                        tks1.setText("Klawisza S3");
-                        tks2.setText("Akcja klawisza S3");
+                        tks1.setText("Klawisz S3");
+                        tks2.setText("Github");
                     }else if(temp==4){
-                        tks1.setText("Klawisza S4");
-                        tks2.setText("Akcja klawisza S4");
+                        tks1.setText("Klawisz S4");
+                        tks2.setText("pk.edu.pl");
                     }else if(temp==5){
-                        tks1.setText("Klawisza S5");
-                        tks2.setText("Akcja klawisza S5");
+                        tks1.setText("Klawisz S5");
+                        tks2.setText("Youtube");
                     }else if(temp==6){
-                        tks1.setText("Klawisza S6");
-                        tks2.setText("Akcja klawisza S6");
+                        tks1.setText("Klawisz S6");
+                        tks2.setText("Nasa");
                     }else if(temp==7){
-                        tks1.setText("Klawisza S7");
-                        tks2.setText("Akcja klawisza S7");
+                        tks1.setText("Klawisz S7");
+                        tks2.setText("AND-TECH.pl");
                     }else if(temp==8){
-                        tks1.setText("Klawisza S8");
-                        tks2.setText("Akcja klawisza S8");
+                        tks1.setText("Klawisz S8");
+                        tks2.setText("Centrum rowerowe");
                     }
                 }
 

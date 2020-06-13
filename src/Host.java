@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.io.*;
 import java.net.*;
 import java.util.Scanner;
@@ -115,35 +116,83 @@ public class Host{
                     buffer1=myinput.readLine();
                     temp=Integer.parseInt(buffer1);
                     if(temp==1){
-                        System.out.println("Akcja klawisza: 1");
+                        try{
+                            String url = "http://www.google.com";
+                            Desktop.getDesktop().browse(new URL(url).toURI());
+                        }
+                        catch(Exception E){
+                            System.err.println("Exp : "+E.getMessage());
+                        }
                         myoutput.print(1+"\n");
                     }
                     else if(temp==2){
-                        System.out.println("Akcja klawisza: 2");
+                        try{
+                            String url = "http://www.elf2.pk.edu.pl";
+                            Desktop.getDesktop().browse(new URL(url).toURI());
+                        }
+                        catch(Exception E){
+                            System.err.println("Exp : "+E.getMessage());
+                        }
                         myoutput.print(2+"\n");
                     }
                     else if(temp==3){
-                        System.out.println("Akcja klawisza: 3");
+                        try{
+                            String url = "http://www.github.com";
+                            Desktop.getDesktop().browse(new URL(url).toURI());
+                        }
+                        catch(Exception E){
+                            System.err.println("Exp : "+E.getMessage());
+                        }
                         myoutput.print(3+"\n");
                     }
                     else if(temp==4){
-                        System.out.println("Akcja klawisza: 4");
+                        try{
+                            String url = "http://www.pk.edu.pl";
+                            Desktop.getDesktop().browse(new URL(url).toURI());
+                        }
+                        catch(Exception E){
+                            System.err.println("Exp : "+E.getMessage());
+                        }
                         myoutput.print(4+"\n");
                     }
                     else if(temp==5){
-                        System.out.println("Akcja klawisza: 5");
+                        try{
+                            String url = "http://www.youtube.com";
+                            Desktop.getDesktop().browse(new URL(url).toURI());
+                        }
+                        catch(Exception E){
+                            System.err.println("Exp : "+E.getMessage());
+                        }
                         myoutput.print(5+"\n");
                     }
                     else if(temp==6){
-                        System.out.println("Akcja klawisza: 6");
+                        try{
+                            String url = "http://www.nasa.gov";
+                            Desktop.getDesktop().browse(new URL(url).toURI());
+                        }
+                        catch(Exception E){
+                            System.err.println("Exp : "+E.getMessage());
+                        }
                         myoutput.print(6+"\n");
                     }
                     else if(temp==7){
-                        System.out.println("Akcja klawisza: 7");
+                        try{
+                            String url = "https://and-tech.pl/zestaw-evb-5-1/";
+                            Desktop.getDesktop().browse(new URL(url).toURI());
+                        }
+                        catch(Exception E){
+                            System.err.println("Exp : "+E.getMessage());
+                        }
                         myoutput.print(7+"\n");
                     }
                     else if(temp==8){
-                        System.out.println("Akcja klawisza: 8");
+                        try{
+                            String url = "https://www.centrumrowerowe.pl/rowery/";
+                            Desktop.getDesktop().browse(new URL(url).toURI());
+                        }
+                        catch(Exception E){
+                            System.err.println("Exp : "+E.getMessage());
+                        }
                         myoutput.print(8+"\n");
                     }
                 }
