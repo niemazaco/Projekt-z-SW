@@ -27,19 +27,26 @@ public class Host{
         try{
             System.out.println("Host attempt to connect to server:"+host+","+port);
             Socket skt=new Socket(host,port);
+            skt.setReceiveBufferSize(8);
+            skt.setSendBufferSize(8);
             BufferedReader myinput=new BufferedReader(new InputStreamReader(skt.getInputStream()));
             PrintStream myoutput=new PrintStream(skt.getOutputStream());
 
             Scanner scanner=new Scanner(System.in);
-            System.out.println("Ktory element ukladu wybierasz:");
+            System.out.println("1.Kontrola poziomu audio i wyswietlanie  na diodach LED");
+            System.out.println("2.Wyswietlanie obciazenia systemu");
+            System.out.println("3.Wywolywanie akcji na PC przyciskami oraz wyswietlanie ich opisu");
+            System.out.println("4.Funkcja Ambilight dla diody RGB");
+            System.out.println("Ktory element ukladu wybierasz:(Wybierz 1,2,3,4)");
             int i=scanner.nextInt();
-            if(i==1 || i==2){
+            if(i==1){
                 myoutput.print("1\n");
                 //String buffer1;
                 System.out.println("Wybrano projekt nr 1 i 2");
                 String tmpLine = "";
                 System.out.println("Dostalem sie do dzwieku!");
-                while ((userInput = myinput.readLine()) != null) {
+                while (!skt.isClosed()) {
+                    userInput=myinput.readLine();
                     System.out.println(userInput);
                     try 
                     {
@@ -78,11 +85,9 @@ public class Host{
                     Thread.sleep(10);
 
                 }
-                myinput.close();
-                skt.close();
-            }else if(i==3){
+            }else if(i==2){
                 //Wyswietlanie obciazania systemu Hosta:
-                myoutput.print("3\n");
+                myoutput.print("2\n");
 
                 DecimalFormat df = new DecimalFormat("##.##");
                 Process temp;
@@ -101,7 +106,7 @@ public class Host{
                 String line4;
                 double ram;
 
-                while(true) {
+                while(!skt.isClosed()) {
 
                     temp = Runtime.getRuntime().exec(new String[]{"bash", "-c", "cat /sys/class/thermal/thermal_zone0/temp"});
                     total = Runtime.getRuntime().exec(new String[]{"bash", "-c", "free | grep Mem | cut -d \" \" -f8"});
@@ -134,15 +139,12 @@ public class Host{
                     myoutput.print(df.format(Double.parseDouble(line4)) + "\n");
                     Thread.sleep(1500);
                 }
-
-
-            }else if(i==4){
+            }else if(i==3){
 
                 String buffer1;
                 int temp;
-                /*AKCJA NA PRZYCISKACH:*/
-                myoutput.print("4\n");
-                while(true){
+                myoutput.print("3\n");
+                while(!skt.isClosed()){
                     buffer1=myinput.readLine();
                     temp=Integer.parseInt(buffer1);
                     if(temp==1){
@@ -226,40 +228,31 @@ public class Host{
                         myoutput.print(8+"\n");
                     }
                 }
-            }else if(i==5){
-                myoutput.print("5\n");
-                /* WYSWIETLANIE KOLORU NA RGB*/
-                //Wartosci na sztywno, do modyfikacji:
-                //TRZEBA POZYSKAC WARTOSC KOLOROW DO PRZESLANIA
-                int SECT_SKIP=10;
+            }else if(i==4){
+                myoutput.print("4\n");
+                int SECT_SKIP=5;
                 Robot robot;
                 try {
                     robot=new Robot();
                     Dimension screenSize;
                     BufferedImage screen;
-                    int X_RES;
-                    int Y_RES;
-                    int width,heigh;
+                    int width,height;
                     int r,g,b;
-                    int loops=0;
+                    int loops;
                     int rgb;
                     Color color;
-                    BufferedImage imgSection;
                     while (true) {
                         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-                        X_RES = screenSize.width;
-                        Y_RES = screenSize.height;
+                        width = screenSize.width;
+                        height = screenSize.height;
                         screen =robot.createScreenCapture(new Rectangle(screenSize));
-                        imgSection=screen.getSubimage(0,0,X_RES,Y_RES);
-                        width=imgSection.getWidth();
-                        heigh=imgSection.getHeight();
                         r=0;
                         g=0;
                         b=0;
                         loops=0;
                         for(int x=0;x<width;x+=SECT_SKIP){
-                            for(int y=0;y<heigh;y+=SECT_SKIP){
-                                rgb=imgSection.getRGB(x,y);
+                            for(int y=0;y<height;y+=SECT_SKIP){
+                                rgb=screen.getRGB(x,y);
                                 color=new Color(rgb);
                                 r+=color.getRed();
                                 g+=color.getGreen();
@@ -281,7 +274,12 @@ public class Host{
             }
             skt.close();
             System.out.println("Host is exiting!");
-        }catch (IOException | InterruptedException exc){
+        }
+        catch(SocketException exc)
+        {
+            System.out.println("Polaczenie z plytka zostalo zakonczone!");
+        }
+        catch (IOException | InterruptedException exc){
             exc.printStackTrace();
             System.out.println("Error!");
         }
